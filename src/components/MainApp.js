@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 
 import Enclose from './Enclose';
 import GameOverScreen from './GameOverScreen';
+import Head from './Head';
+import MainMenu from './MainMenu';
 
 class MainApp extends Component {
 
   state = {
-    timerWidth: 100,
+    timerWidth: 10,
     isCorrect: false,
     isGameOver: false,
     score: 0,
     num1: 0,
     num2: 0,
-    result: 0
+    result: 0,
+    playClicked: false,
+    intervalId: ''
   };
 
   generateRandom = () => {
@@ -40,15 +44,16 @@ class MainApp extends Component {
           isCorrect: true,
           isGameOver: false,
           score: this.state.score + 100,
-          timerWidth: 100
+          timerWidth: 10
         })
         this.generateRandom();
       } else {
         this.setState({
           isCorrect: false,
           isGameOver: true,
-          timerWidth: 0
+          timerWidth: 0,
         });
+        clearInterval(this.state.intervalId);
       }
     } else {
       if (correctButtonClicked === false) {
@@ -56,28 +61,30 @@ class MainApp extends Component {
           isCorrect: true,
           isGameOver: false,
           score: this.state.score + 100,
-          timerWidth: 100
+          timerWidth: 10
         })
         this.generateRandom();
       } else {
         this.setState({
           isCorrect: false,
           isGameOver: true,
-          timerWidth: 0
+          timerWidth: 0,
         });
+        clearInterval(this.state.intervalId);
       }
     }
   }
 
   restartHandler = () => {
-    this.setState({ isGameOver: false, score: 0, timerWidth: 100 });
+    let intervalId = setInterval(this.timerHandler, 600);
+    this.setState({ isGameOver: false, score: 0, timerWidth: 10, intervalId });
     this.generateRandom();
   };
 
   timerHandler = () => {
     if (this.state.timerWidth > 0) {
       this.setState({ 
-        timerWidth: this.state.timerWidth - 10,
+        timerWidth: this.state.timerWidth - 1,
         isGameOver: false
       });
     } else {
@@ -85,20 +92,29 @@ class MainApp extends Component {
     }
   };
 
-  componentDidMount() {
+  playHandler = () => {
     this.generateRandom();
-    setInterval(this.timerHandler, 600);
-  }
+    let intervalId = setInterval(this.timerHandler, 600);
+    this.setState({ playClicked: true, intervalId });
+  };
+
+  encloseOrNot = () => {
+    if (this.state.playClicked) {
+      return <Enclose handleCheckButton={this.handleCheckButton} things={this.state} />;
+    } 
+  };
 
   render() {
     return (
       <div>
+        <Head />
+        { !this.state.playClicked && <MainMenu playHandler={this.playHandler} /> }
         {
           this.state.isGameOver
             ?
             <GameOverScreen score={this.state.score} restartHandler={this.restartHandler} />
             :
-            <Enclose handleCheckButton={this.handleCheckButton} things={this.state} />
+            this.encloseOrNot()
         }
       </div>
     );

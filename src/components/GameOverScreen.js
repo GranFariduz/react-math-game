@@ -6,9 +6,8 @@ const GameOverScreen = (props) => {
 
   return (
     <div>
-      <h2>This is game over!</h2>
       <h3>Your score: {props.score}</h3>
-      <button onClick={restart}>Restart Game</button>
+      <button onClick={restart}>Game Over! Restart Game?</button>
     </div>
   );
 
