@@ -83,7 +83,7 @@ class MainApp extends Component {
 
   timerHandler = () => {
     if (this.state.timerWidth > 0) {
-      this.setState({ 
+      this.setState({
         timerWidth: this.state.timerWidth - 1,
         isGameOver: false
       });
@@ -98,23 +98,17 @@ class MainApp extends Component {
     this.setState({ playClicked: true, intervalId });
   };
 
-  encloseOrNot = () => {
-    if (this.state.playClicked) {
-      return <Enclose handleCheckButton={this.handleCheckButton} things={this.state} />;
-    } 
-  };
-
   render() {
     return (
       <div>
         <Head />
-        { !this.state.playClicked && <MainMenu playHandler={this.playHandler} /> }
+        {!this.state.playClicked && <MainMenu playHandler={this.playHandler} />}
         {
           this.state.isGameOver
             ?
             <GameOverScreen score={this.state.score} restartHandler={this.restartHandler} />
             :
-            this.encloseOrNot()
+            (this.state.playClicked && <Enclose handleCheckButton={this.handleCheckButton} things={this.state} />)
         }
       </div>
     );
