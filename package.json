@@ -1,11 +1,11 @@
 {
-  "name": "test",
+  "name": "la-pulga",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "build": "webpack",
-    "dev-server": "webpack-dev-server"
+    "dev-server": "webpack-dev-server --port 2300"
   },
   "dependencies": {
     "babel-core": "6.25.0",
